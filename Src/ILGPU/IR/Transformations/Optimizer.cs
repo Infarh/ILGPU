@@ -190,6 +190,15 @@ namespace ILGPU.IR.Transformations
             // Final cleanup phases to improve performance
             builder.Add(new CleanupBlocks());
             builder.Add(new SimplifyControlFlow());
+
+            if (level > OptimizationLevel.O1)
+            {
+                // Add additional code placement optimizations to reduce register
+                // pressure and improve performance
+                builder.Add(new DeadCodeElimination());
+                builder.Add(new CodePlacement());
+                builder.Add(new LoopInvariantCodeMotion());
+            }
         }
 
         /// <summary>
